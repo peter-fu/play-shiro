@@ -2,7 +2,7 @@ import models.User
 import play.api._
 
 import org.apache.shiro.mgt.DefaultSecurityManager
-import security.{StringPasswordEncryptor, SampleRealm}
+import security._
 
 /**
  *

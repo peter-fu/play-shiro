@@ -6,6 +6,8 @@ import org.apache.shiro.authc.credential._
 import org.apache.shiro.subject._
 import org.apache.shiro.authz._
 
+import models.User
+
 /**
  * Custom realm, with thanks to
  * <a href="https://github.com/Arnauld/scalaadin/wiki/Authentication:-Vaadin+Shiro">the Vaadin Shiro integration</a>.
@@ -14,10 +16,6 @@ import org.apache.shiro.authz._
  * @since 1/8/12
  */
 class SampleRealm extends AuthorizingRealm {
-
-  val userService = models.User
-
-  val passwordEncryptor = StringPasswordEncryptor
 
   override protected def doGetAuthenticationInfo(token: AuthenticationToken): AuthenticationInfo = {
     val upToken = token.asInstanceOf[UsernamePasswordToken]
@@ -41,13 +39,13 @@ class SampleRealm extends AuthorizingRealm {
     def doCredentialsMatch(token: AuthenticationToken, info: AuthenticationInfo) = {
       val message = new String(token.getCredentials.asInstanceOf[Array[Char]])
       val digest = info.getCredentials.toString
-      val result = passwordEncryptor.checkPassword(message, digest)
+      val result = Password.checkPassword(message, digest)
       result
     }
   };
 
   private def passwordOf(username:String) : String = {
-    userService.findByEmail(username) match {
+    User.findByEmail(username) match {
       case Some(user) => user.password
       case None => null
     }

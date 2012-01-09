@@ -8,7 +8,7 @@ import play.api.Play.current
 
 import anorm._
 import anorm.SqlParser._
-import security.StringPasswordEncryptor
+import security.Password
 
 /**
  *
@@ -19,8 +19,6 @@ import security.StringPasswordEncryptor
 case class User(email: String, password: String)
 
 object User {
-
-  val passwordEncryptor = StringPasswordEncryptor
 
   /**
    * Parse a User from a ResultSet
@@ -88,7 +86,7 @@ object User {
           """
         ).on(
           'email -> user.email,
-          'password -> passwordEncryptor.encryptPassword(user.password)
+          'password -> Password.encryptPassword(user.password)
         ).executeUpdate()
         user
     }
