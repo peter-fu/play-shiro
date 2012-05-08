@@ -43,9 +43,9 @@ object User {
     }
   }
 
-  def attach(token:String) {
-    SecurityUtils.getSubject.login(token)
-  }
+//  def attach(token:String) {
+//    SecurityUtils.getSubject.login(token)
+//  }
 
   def authenticate(email: String, password: String): Boolean = {
     // Use shiro to pass through a username password token.
