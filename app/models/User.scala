@@ -24,10 +24,7 @@ object User {
    * Parse a User from a ResultSet
    */
   val simple = {
-    get[String]("user.email") ~/
-      get[String]("user.password") ^^ {
-      case email~password => User(email, password)
-    }
+    get[String]("user.email") ~ get[String]("user.password") map { case email~password => User(email, password) }
   }
 
   def findByEmail(email: String): Option[User] = {
@@ -35,7 +32,7 @@ object User {
       implicit connection =>
         SQL("select * from user where email = {email}").on(
           'email -> email
-        ).as(User.simple ?)
+        ).as(User.simple.singleOpt)
     }
   }
 
@@ -44,6 +41,10 @@ object User {
       implicit connection =>
         SQL("select * from user").as(User.simple *)
     }
+  }
+
+  def attach(token:String) {
+    SecurityUtils.getSubject.login(token)
   }
 
   def authenticate(email: String, password: String): Boolean = {

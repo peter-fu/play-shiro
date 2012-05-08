@@ -6,6 +6,7 @@ import models._
 
 import play.api.mvc._
 import play.api.data._
+import play.api.data.Forms._
 
 /**
  *
@@ -17,7 +18,7 @@ object Register extends Controller {
 
 
   val registerForm = Form(
-    of(
+    tuple(
       "email" -> text,
       "password" -> text
     ) verifying("Cannot register user", result => result match {

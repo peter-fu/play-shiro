@@ -1,7 +1,7 @@
 import models.User
+import org.apache.shiro.mgt.{DefaultSessionStorageEvaluator, DefaultSubjectDAO, DefaultSecurityManager}
 import play.api._
 
-import org.apache.shiro.mgt.DefaultSecurityManager
 import security._
 
 /**
@@ -25,6 +25,13 @@ object ShiroConfig {
     val sampleRealm = new SampleRealm()
     val securityManager = new DefaultSecurityManager()
     securityManager.setRealm(sampleRealm)
+
+    // Turn off session storage for better "stateless" management.
+    // https://shiro.apache.org/session-management.html#SessionManagement-StatelessApplications%2528Sessionless%2529
+    val subjectDAO = securityManager.getSubjectDAO.asInstanceOf[DefaultSubjectDAO]
+    val sessionStorageEvaluator = subjectDAO.getSessionStorageEvaluator.asInstanceOf[DefaultSessionStorageEvaluator]
+    sessionStorageEvaluator.setSessionStorageEnabled(false)
+
     org.apache.shiro.SecurityUtils.setSecurityManager(securityManager)
   }
 

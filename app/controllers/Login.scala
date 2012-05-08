@@ -5,6 +5,7 @@ import views.html
 import play.api._
 import play.api.mvc._
 import play.api.data._
+import play.api.data.Forms._
 
 import models.User
 
@@ -19,7 +20,7 @@ object Login extends Controller {
   // -- Authentication
 
   val loginForm = Form(
-    of(
+    tuple(
       "email" -> email,
       "password" -> text
     ) verifying ("Invalid email or password", result => result match {
