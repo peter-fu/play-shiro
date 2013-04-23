@@ -2,6 +2,14 @@
 
 This is a very simple integration between Apache Shiro, an authorization and authentication platform, and Play 2.0.
 
+### WARNING
+
+This is in no way production level code.  It is proof of concept and maintained only out of idle interest; it may
+give you a leg up if you're already tasked with integration, but it is not going to help you if you want a turnkey
+authentication system.  If that's what you're looking for, I recommend you use SecureSocial or Play-Authenticate.
+
+### Starting
+
 To start the application, check the project out from Github, make sure you have Play 2.0 installed, then type
 
     play run
@@ -22,4 +30,4 @@ When you logout, User.logout will call Shiro to invalidate the current session.
 
 Shiro assumes a stateful session strategy, which goes against Play's stateless application.  You may want to check the Reference Manual for how to handle this.
 
-Shiro's Reference Manual discusses "stateless" sessions using Shiro's 1.2 API: as of this time of writing (1/8/2012) 1.2 is still in beta.
+Shiro's Reference Manual discusses "stateless" sessions using Shiro's 1.2 API: as of this time of writing (4/18/2012) 1.2 is still in beta.

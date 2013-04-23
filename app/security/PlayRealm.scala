@@ -15,29 +15,23 @@ import models.User
  * @author wsargent
  * @since 1/8/12
  */
-class SampleRealm extends AuthorizingRealm {
+class PlayRealm extends AuthorizingRealm {
 
   override protected def doGetAuthenticationInfo(token: AuthenticationToken): AuthenticationInfo = {
 
-    if (token.isInstanceOf[UsernamePasswordToken]) {
+    val upToken = token.asInstanceOf[UsernamePasswordToken]
 
+    val username = upToken.getUsername
+    checkNotNull(username, "Null usernames are not allowed by this realm.")
 
-    }
-      val upToken = token.asInstanceOf[UsernamePasswordToken]
+    // retrieve the 'real' user password
+    val password = passwordOf(username)
 
-      val username = upToken.getUsername
-      checkNotNull(username, "Null usernames are not allowed by this realm.")
+    checkNotNull(password, "No account found for user [" + username + "]")
 
-      // retrieve the 'real' user password
-      val password = passwordOf(username)
-
-      checkNotNull(password, "No account found for user [" + username + "]")
-
-      // return the 'real' info for username, security manager is then responsible
-      // for checking the token against the provided info
-      return new SimpleAuthenticationInfo(username, password, getName)
-
-
+    // return the 'real' info for username, security manager is then responsible
+    // for checking the token against the provided info
+    new SimpleAuthenticationInfo(username, password, getName)
   }
 
   override def getCredentialsMatcher = new CredentialsMatcher() {
@@ -49,7 +43,7 @@ class SampleRealm extends AuthorizingRealm {
       val result = Password.checkPassword(message, digest)
       result
     }
-  };
+  }
 
   private def passwordOf(username:String) : String = {
     User.findByEmail(username) match {
