@@ -1,16 +1,22 @@
 ### Play Shiro Integration ###
 
-This is a very simple integration between Apache Shiro, an authorization and authentication platform, and Play 2.0.
+This is a very simple integration between Apache Shiro, an authorization and authentication platform, and Play 2.1.
 
 ### WARNING
 
-This is in no way production level code.  It is proof of concept and maintained only out of idle interest; it may
+This is in no way production level code.  It is an experimental proof of concept, uploaded only out of idle interest; it may
 give you a leg up if you're already tasked with integration, but it is not going to help you if you want a turnkey
 authentication system.  If that's what you're looking for, I recommend you use SecureSocial or Play-Authenticate.
 
+In particular, Shiro assumes a stateful session strategy, which goes against Play's stateless application.  Internally,
+Shiro uses a ThreadLocal to reference the session; shiro-web has a way of disabling session creation, but since Play
+isn't built on the Servlet model, I've gone in and stripped those bits out by hand.  Which breaks everything.
+
+It does compile though.  I think.
+
 ### Starting
 
-To start the application, check the project out from Github, make sure you have Play 2.0 installed, then type
+To start the application, check the project out from Github, make sure you have Play 2.1 installed, then type
 
     play run
 
@@ -20,14 +26,13 @@ And run through the DB evolutions needed.  Then go to http://localhost:9000.
 
 When the Global object is called, it configures Shiro's security manager with security.SampleRealm.
 
-When you hit the page, Play will look for a token called "email" in request.session, and find the email address corresponding to that token.  That token is only set if we have successfully logged in.
+When you hit the page, Play will look for a token called "email" in request.session, and find the email address
+corresponding to that token.  That token is only set if we have successfully logged in.
 
-When you login, User.authenticate will use Shiro's SecurityUtils.currentUser, call login on that, and that will go back to the Realm for digest checking.  (Note that we use Jasypt to deal with password complexity.)
+When you login, User.authenticate will use Shiro's SecurityUtils.currentUser, call login on that, and that will go back
+to the Realm for digest checking.  (Note that we use Jasypt to deal with password complexity.)
 
 When you logout, User.logout will call Shiro to invalidate the current session.
 
 ### Warning ###
 
-Shiro assumes a stateful session strategy, which goes against Play's stateless application.  You may want to check the Reference Manual for how to handle this.
-
-Shiro's Reference Manual discusses "stateless" sessions using Shiro's 1.2 API: as of this time of writing (4/18/2012) 1.2 is still in beta.
