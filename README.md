@@ -10,9 +10,9 @@ authentication system.  If that's what you're looking for, I recommend you use S
 
 In particular, Shiro assumes a stateful session strategy, which goes against Play's stateless application.  Internally,
 Shiro uses a ThreadLocal to reference the session; shiro-web has a way of disabling session creation, but since Play
-isn't built on the Servlet model, I've gone in and stripped those bits out by hand.  Which breaks everything.
-
-It does compile though.  I think.
+isn't built on the Servlet model, I've created analogues for Play that will never create a session.  I tested it using 
+Firefox, Safari and Chrome on my Macbook Pro, and was able to log in with different credentials on each browser, but this
+is not a guarantee of safety.  
 
 ### Starting
 
@@ -33,6 +33,3 @@ When you login, User.authenticate will use Shiro's SecurityUtils.currentUser, ca
 to the Realm for digest checking.  (Note that we use Jasypt to deal with password complexity.)
 
 When you logout, User.logout will call Shiro to invalidate the current session.
-
-### Warning ###
-
