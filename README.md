@@ -1,6 +1,6 @@
 ### Play Shiro Integration ###
 
-This is a very simple integration between Apache Shiro, an authorization and authentication platform, and Play 2.1.
+This is a very simple integration between Apache Shiro, an authorization and authentication platform, and Play 2.2.3
 
 ### WARNING
 
@@ -16,7 +16,7 @@ is not a guarantee of safety.
 
 ### Starting
 
-To start the application, check the project out from Github, make sure you have Play 2.1 installed, then type
+To start the application, check the project out from Github, make sure you have Play 2.2.3 installed, then type
 
     play run
 
